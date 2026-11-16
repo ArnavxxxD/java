@@ -280,52 +280,97 @@ function checkPalindrome() {
 ```html
 <!DOCTYPE html>
 <html>
+<head>
+<title>Experiment 5</title>
+<style>
+body {
+    font-family: Arial;
+    background: #f0fdf4;
+    text-align: center;
+    padding: 30px;
+}
+.box {
+    background: white;
+    padding: 25px;
+    width: 350px;
+    margin: auto;
+    border-radius: 10px;
+}
+input, button {
+    padding: 10px;
+    margin: 8px;
+}
+button {
+    background: green;
+    color: white;
+    border: none;
+}
+#result {
+    background: #dcfce7;
+    padding: 12px;
+}
+</style>
+</head>
 <body>
-<h2>Shopping Cart</h2>
-Item: <input id="name">
-Price: <input id="price" type="number">
-Quantity: <input id="qty" type="number">
-<button onclick="addItem()">Add Item</button>
-<ul id="list"></ul>
-<p id="total"></p>
+
+<div class="box">
+<h2>Shopping Cart Calculator</h2>
+
+<input type="text" id="name" placeholder="Product Name">
+<input type="number" id="price" placeholder="Product Price">
+<br>
+
+<button onclick="addItem()">Add Product</button>
+
+<h3>Cart Items</h3>
+<p id="items"></p>
+<h3 id="result"></h3>
+</div>
+
 <script>
 let cart = [];
+
 function addItem() {
-let name = document.getElementById("name").value;
-let price = Number(document.getElementById("price").value);
-let qty = Number(document.getElementById("qty").value);
-if (name === "" || price <= 0 || qty <= 0) {
-alert("Enter valid item details");
-return;
+    let name = document.getElementById("name").value;
+    let price = Number(document.getElementById("price").value);
+
+    if (name === "" || price <= 0) {
+        alert("Enter valid product details");
+        return;
+    }
+
+    // Object inside array
+    let product = {name: name, price: price};
+    cart.push(product);
+
+    displayCart();
+
+    document.getElementById("name").value = "";
+    document.getElementById("price").value = "";
 }
-let item = { name: name, price: price, qty: qty };
-cart.push(item);
-showCart();
-}
-function showCart() {
-let list = "";
-// map() displays cart items
-cart.map(function(item) {
-list += "<li>" + item.name + " - Rs. " +
-item.price + " x " + item.qty + "</li>";
-});
-document.getElementById("list").innerHTML = list;
-// reduce() calculates total
-let total = cart.reduce(function(sum, item) {
-return sum + item.price * item.qty;
-}, 0);
-let discount = 0;
-if (total > 1000) {
-discount = total * 10 / 100;
-} else if (total > 500) {
-discount = total * 5 / 100;
-}
-document.getElementById("total").innerHTML =
-"Total: Rs. " + total +
-"<br>Discount: Rs. " + discount +
-"<br>To Pay: Rs. " + (total - discount);
+
+function displayCart() {
+
+    // Using map()
+    let items = cart.map(p => p.name + " - ₹" + p.price);
+
+    document.getElementById("items").innerHTML =
+        items.join("<br>");
+
+    // Using reduce()
+    let total = cart.reduce((sum, p) => sum + p.price, 0);
+
+    let discount = total >= 1000 ? total * 0.10 : 0;
+
+    let finalAmount = total - discount;
+
+    document.getElementById("result").innerHTML =
+        "Total: ₹" + total +
+        "<br>Discount: ₹" + discount +
+        "<br>Final Amount: ₹" + finalAmount;
 }
 </script>
+
 </body>
 </html>
 ```
