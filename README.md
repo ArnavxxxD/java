@@ -581,63 +581,75 @@ function addTask() {
 ### `index.html`
 
 ```html
+```html
 <!DOCTYPE html>
 <html>
 <head>
-<title>Experiment 8</title>
-<style>
-body {
-    font-family: Arial;
-    background: #eff6ff;
-    text-align: center;
-    padding: 30px;
-}
-form {
-    background: white;
-    width: 350px;
-    margin: auto;
-    padding: 25px;
-    border-radius: 10px;
-}
-input, select, button {
-    width: 90%;
-    padding: 10px;
-    margin: 8px;
-}
-button {
-    background: blue;
-    color: white;
-    border: none;
-}
-#msg {
-    color: red;
-}
-</style>
+    <title>Experiment 8</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #eff6ff;
+            text-align: center;
+            padding: 30px;
+        }
+
+        form {
+            background: white;
+            width: 350px;
+            margin: auto;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        input, select, button {
+            width: 90%;
+            padding: 10px;
+            margin: 8px;
+        }
+
+        button {
+            background: blue;
+            color: white;
+            border: none;
+        }
+
+        #msg {
+            color: red;
+        }
+    </style>
 </head>
+
 <body>
 
 <form onsubmit="return validateForm()">
-<h2>Gym Admission Form</h2>
 
-<input type="text" id="name" placeholder="Full Name" required>
+    <h2>Gym Admission Form</h2>
 
-<input type="number" id="age" placeholder="Age" required>
+    <input type="text" id="name" placeholder="Full Name" required>
 
-<input type="text" id="phone" placeholder="Phone Number" required>
+    <input type="number" id="age" placeholder="Age" required>
 
-<select id="plan">
-<option value="">Select Plan</option>
-<option>Monthly</option>
-<option>Yearly</option>
-</select>
+    <input type="text" id="phone" placeholder="Phone Number" required>
 
-<p id="msg"></p>
+    <input type="email" id="email" placeholder="Email Address" required>
 
-<button type="submit">Submit</button>
+    <select id="plan" required>
+        <option value="">Select Plan</option>
+        <option>Monthly</option>
+        <option>Yearly</option>
+    </select>
+
+    <p id="msg"></p>
+
+    <button type="submit">Submit</button>
+
 </form>
 
 <script>
-// Live input event
+
+// Live age validation
 document.getElementById("age").addEventListener("input", function() {
     let age = Number(this.value);
 
@@ -647,13 +659,19 @@ document.getElementById("age").addEventListener("input", function() {
 
 // Form validation
 function validateForm() {
+
     let name = document.getElementById("name").value;
     let age = Number(document.getElementById("age").value);
     let phone = document.getElementById("phone").value;
+    let email = document.getElementById("email").value;
     let plan = document.getElementById("plan").value;
 
+    let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
     if (name.trim() === "" || age < 18 ||
-        !/^\d{10}$/.test(phone) || plan === "") {
+        !/^\d{10}$/.test(phone) ||
+        !emailPattern.test(email) || plan === "") {
+
         alert("Please enter valid details");
         return false;
     }
@@ -661,10 +679,12 @@ function validateForm() {
     alert("Gym Admission Successful!");
     return false;
 }
+
 </script>
 
 </body>
 </html>
+```
 ```
 
 **Output:** Enter valid details in the form. Incorrect details show an alert. Correct details display Admission successful with the selected plan.
