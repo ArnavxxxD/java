@@ -479,39 +479,92 @@ function analyzeText() {
 ```html
 <!DOCTYPE html>
 <html>
+<head>
+<title>Experiment 7</title>
+<style>
+body {
+    font-family: Arial;
+    background: #f5f3ff;
+    text-align: center;
+    padding: 30px;
+}
+.box {
+    background: white;
+    width: 380px;
+    margin: auto;
+    padding: 25px;
+    border-radius: 10px;
+}
+input, button {
+    padding: 10px;
+    margin: 5px;
+}
+button {
+    background: purple;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+li {
+    padding: 10px;
+    text-align: left;
+    margin: 8px;
+    background: #eee;
+}
+</style>
+</head>
 <body>
-<h2>To-Do List</h2>
+
+<div class="box">
+<h2>My To-Do List</h2>
+
 <input id="task" placeholder="Enter a task">
 <button onclick="addTask()">Add</button>
+
 <ul id="list"></ul>
+</div>
+
 <script>
 function addTask() {
-let input = document.getElementById("task");
-if (input.value.trim() === "") {
-alert("Enter a task");
-return;
-}
-let li = document.createElement("li");
-li.innerHTML = input.value +
-" <button onclick='editTask(this)'>Edit</button>" +
-" <button onclick='deleteTask(this)'>Delete</button>";
-document.getElementById("list").appendChild(li);
-input.value = "";
-// DOM traversal
-console.log(li.parentElement);
-console.log(li.children);
-}
-function editTask(button) {
-let li = button.parentElement;
-let newTask = prompt("Enter new task:");
-if (newTask !== null && newTask.trim() !== "") {
-li.firstChild.textContent = newTask + " ";
-}
-}
-function deleteTask(button) {
-button.parentElement.remove();
+    let value = document.getElementById("task").value;
+
+    if (value.trim() === "") {
+        alert("Enter a task");
+        return;
+    }
+
+    // Create new element
+    let li = document.createElement("li");
+
+    let span = document.createElement("span");
+    span.textContent = value;
+
+    // Edit button
+    let edit = document.createElement("button");
+    edit.textContent = "Edit";
+    edit.onclick = function() {
+        let newTask = prompt("Edit task", span.textContent);
+        if (newTask && newTask.trim() !== "")
+            span.textContent = newTask;
+    };
+
+    // Delete button
+    let del = document.createElement("button");
+    del.textContent = "Delete";
+    del.onclick = function() {
+        li.remove();
+    };
+
+    li.appendChild(span);
+    li.appendChild(edit);
+    li.appendChild(del);
+
+    document.getElementById("list").appendChild(li);
+
+    document.getElementById("task").value = "";
 }
 </script>
+
 </body>
 </html>
 ```
@@ -530,46 +583,86 @@ button.parentElement.remove();
 ```html
 <!DOCTYPE html>
 <html>
-<body>
-<h2>Gym Admission Form</h2>
-<form id="gymForm">
-Name: <input id="name"><br><br>
-Age: <input id="age" type="number"><br><br>
-Phone: <input id="phone"><br><br>
-Email: <input id="email"><br><br>
-Plan:
-<select id="plan">
-<option>Monthly</option>
-<option>Quarterly</option>
-<option>Yearly</option>
-</select><br><br>
-<button type="submit">Join Gym</button>
-</form>
-<p id="result"></p>
-<script>
-document.getElementById("gymForm").addEventListener("submit", function(event) {
-event.preventDefault();
-let name = document.getElementById("name").value;
-let age = Number(document.getElementById("age").value);
-let phone = document.getElementById("phone").value;
-let email = document.getElementById("email").value;
-let plan = document.getElementById("plan").value;
-let phonePattern = /^\d{10}$/;
-let emailPattern = /^[a-zA-Z0-9._]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/;
-if (name.length < 3) {
-alert("Name must have at least 3 letters");
-} else if (age < 15 || age > 60) {
-alert("Age must be between 15 and 60");
-} else if (!phonePattern.test(phone)) {
-alert("Enter a 10 digit phone number");
-} else if (!emailPattern.test(email)) {
-alert("Enter a valid email");
-} else {
-document.getElementById("result").innerText =
-"Admission successful! Plan: " + plan;
+<head>
+<title>Experiment 8</title>
+<style>
+body {
+    font-family: Arial;
+    background: #eff6ff;
+    text-align: center;
+    padding: 30px;
 }
+form {
+    background: white;
+    width: 350px;
+    margin: auto;
+    padding: 25px;
+    border-radius: 10px;
+}
+input, select, button {
+    width: 90%;
+    padding: 10px;
+    margin: 8px;
+}
+button {
+    background: blue;
+    color: white;
+    border: none;
+}
+#msg {
+    color: red;
+}
+</style>
+</head>
+<body>
+
+<form onsubmit="return validateForm()">
+<h2>Gym Admission Form</h2>
+
+<input type="text" id="name" placeholder="Full Name" required>
+
+<input type="number" id="age" placeholder="Age" required>
+
+<input type="text" id="phone" placeholder="Phone Number" required>
+
+<select id="plan">
+<option value="">Select Plan</option>
+<option>Monthly</option>
+<option>Yearly</option>
+</select>
+
+<p id="msg"></p>
+
+<button type="submit">Submit</button>
+</form>
+
+<script>
+// Live input event
+document.getElementById("age").addEventListener("input", function() {
+    let age = Number(this.value);
+
+    document.getElementById("msg").innerHTML =
+        age >= 18 ? "Eligible for admission" : "Minimum age is 18";
 });
+
+// Form validation
+function validateForm() {
+    let name = document.getElementById("name").value;
+    let age = Number(document.getElementById("age").value);
+    let phone = document.getElementById("phone").value;
+    let plan = document.getElementById("plan").value;
+
+    if (name.trim() === "" || age < 18 ||
+        !/^\d{10}$/.test(phone) || plan === "") {
+        alert("Please enter valid details");
+        return false;
+    }
+
+    alert("Gym Admission Successful!");
+    return false;
+}
 </script>
+
 </body>
 </html>
 ```
