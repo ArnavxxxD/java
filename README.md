@@ -699,50 +699,153 @@ function validateForm() {
 ```html
 <!DOCTYPE html>
 <html>
-<body id="page">
-<h2>Theme Settings</h2>
-<button onclick="setTheme('light')">Light Theme</button>
-<button onclick="setTheme('dark')">Dark Theme</button>
-<button onclick="resetTheme()">Reset</button>
-<br><br>
-Name: <input id="name">
-<button onclick="saveName()">Save Name</button>
-<p id="result"></p>
-<script>
-function setTheme(theme) {
-localStorage.setItem("theme", theme);
-applyTheme();
-}
-function applyTheme() {
-let theme = localStorage.getItem("theme");
-let page = document.getElementById("page");
-if (theme === "dark") {
-page.style.background = "black";
-page.style.color = "white";
-} else {
-page.style.background = "white";
-page.style.color = "black";
-}
-}
-function resetTheme() {
-localStorage.removeItem("theme");
-applyTheme();
-}
-function saveName() {
-let name = document.getElementById("name").value;
-sessionStorage.setItem("username", name);
-showName();
-}
-function showName() {
-let name = sessionStorage.getItem("username");
-if (name) {
- document.getElementById("result").innerText = "Hello " + name;
-}
-}
-// Load saved settings
-applyTheme();
-showName();
-</script>
+<head>
+    <title>LocalStorage and SessionStorage</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            padding: 40px;
+            background: white;
+            color: black;
+            transition: 0.3s;
+        }
+
+        .dark {
+            background: #222;
+            color: white;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background: steelblue;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>LocalStorage and SessionStorage</h1>
+
+    <h3>Select Storage Type</h3>
+
+    <button onclick="selectStorage('local')">
+        LocalStorage
+    </button>
+
+    <button onclick="selectStorage('session')">
+        SessionStorage
+    </button>
+
+    <p id="storage">Selected: LocalStorage</p>
+
+    <h3>Select Theme</h3>
+
+    <button onclick="setTheme('light')">
+        Light Theme
+    </button>
+
+    <button onclick="setTheme('dark')">
+        Dark Theme
+    </button>
+
+    <br>
+
+    <button onclick="clearStorage()">
+        Clear Storage
+    </button>
+
+    <p id="result">Welcome! Select a theme.</p>
+
+    <script>
+
+        let selectedStorage = "local";
+
+        // Get selected storage
+        function getStorage() {
+            if (selectedStorage === "local") {
+                return localStorage;
+            } else {
+                return sessionStorage;
+            }
+        }
+
+        // Select storage type
+        function selectStorage(type) {
+            selectedStorage = type;
+
+            document.getElementById("storage").innerHTML =
+                "Selected: " + type.toUpperCase() + "Storage";
+
+            let theme = getStorage().getItem("theme");
+
+            if (theme) {
+                applyTheme(theme);
+                document.getElementById("result").innerHTML =
+                    "Theme loaded from " + type + "Storage";
+            } else {
+                document.getElementById("result").innerHTML =
+                    "No saved theme found in " + type + "Storage";
+            }
+        }
+
+        // Save and apply theme
+        function setTheme(theme) {
+
+            getStorage().setItem("theme", theme);
+
+            applyTheme(theme);
+
+            document.getElementById("result").innerHTML =
+                theme + " theme saved in " +
+                selectedStorage.toUpperCase() + "Storage";
+        }
+
+        // Apply theme
+        function applyTheme(theme) {
+            document.body.classList.toggle(
+                "dark", theme === "dark"
+            );
+        }
+
+        // Clear both storages
+        function clearStorage() {
+
+            localStorage.removeItem("theme");
+            sessionStorage.removeItem("theme");
+
+            selectedStorage = "local";
+
+            applyTheme("light");
+
+            document.getElementById("storage").innerHTML =
+                "Selected: LocalStorage";
+
+            document.getElementById("result").innerHTML =
+                "Both storages cleared successfully!";
+        }
+
+        // Automatically load LocalStorage theme
+        window.onload = function() {
+
+            let savedTheme = localStorage.getItem("theme");
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+
+                document.getElementById("result").innerHTML =
+                    "Saved theme loaded from LocalStorage";
+            }
+        };
+
+    </script>
+
 </body>
 </html>
 ```
