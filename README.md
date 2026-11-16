@@ -581,7 +581,6 @@ function addTask() {
 ### `index.html`
 
 ```html
-```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -685,7 +684,6 @@ function validateForm() {
 </body>
 </html>
 ```
-```
 
 **Output:** Enter valid details in the form. Incorrect details show an alert. Correct details display Admission successful with the selected plan.
 
@@ -738,7 +736,7 @@ showName();
 function showName() {
 let name = sessionStorage.getItem("username");
 if (name) {
-document.getElementById("result").innerText = "Hello " + name;
+ document.getElementById("result").innerText = "Hello " + name;
 }
 }
 // Load saved settings
