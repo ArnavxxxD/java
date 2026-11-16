@@ -206,58 +206,60 @@ name + "<br>Total: " + total +
 ```html
 <!DOCTYPE html>
 <html>
+<head>
+<title>Experiment 4</title>
+<style>
+body {
+    font-family: Arial;
+    background: #eef2ff;
+    text-align: center;
+    padding: 30px;
+}
+.box {
+    background: white;
+    padding: 25px;
+    margin: auto;
+    width: 350px;
+    border-radius: 10px;
+}
+input, button {
+    padding: 10px;
+    margin: 8px;
+}
+button {
+    background: blue;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+</style>
+</head>
 <body>
+<div class="box">
 <h2>Palindrome Checker</h2>
-Enter a word: <input id="word">
-<button onclick="checkWord()">Check</button>
-<p id="result"></p>
+<input type="text" id="word" placeholder="Enter a word">
+<br>
+<button onclick="checkPalindrome()">Check</button>
+<h3 id="result"></h3>
 <script>
-// Function types
-function add(a, b) {
-return a + b;
-}
-let multiply = function(a, b) {
-return a * b;
-};
-let square = n => n * n;
-console.log(add(2, 3));
-console.log(multiply(2, 3));
-console.log(square(4));
-// Scope
-let message = "Global variable";
-function showScope() {
-let local = "Local variable";
-console.log(message);
-console.log(local);
-}
-showScope();
-// Closure
-function counter() {
-let count = 0;
-return function() {
-count++;
-return count;
-};
-}
-let countNumber = counter();
-console.log(countNumber());
-console.log(countNumber());
 // Palindrome using try-catch
-function checkWord() {
-try {
-let word = document.getElementById("word").value;
-if (word.trim() === "") {
-throw "Please enter a word";
-}
-let reverse = word.split("").reverse().join("");
-if (word.toLowerCase() === reverse.toLowerCase()) {
-document.getElementById("result").innerText = "Palindrome";
-} else {
-document.getElementById("result").innerText = "Not a Palindrome";
-}
-} catch (error) {
-document.getElementById("result").innerText = error;
-}
+function checkPalindrome() {
+    try {
+        let str = document.getElementById("word").value.toLowerCase();
+
+        if (str === "")
+            throw "Please enter a word";
+
+        let reverse = str.split("").reverse().join("");
+
+        if (str === reverse)
+            document.getElementById("result").innerHTML = "Palindrome";
+        else
+            document.getElementById("result").innerHTML = "Not Palindrome";
+    }
+    catch(error) {
+        document.getElementById("result").innerHTML = error;
+    }
 }
 </script>
 </body>
