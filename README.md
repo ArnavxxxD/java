@@ -865,47 +865,181 @@ function validateForm() {
 <!DOCTYPE html>
 <html>
 <head>
-<title>JSON Data</title>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <title>Student JSON Data</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 30px;
+            background: #f2f2f2;
+        }
+
+        h1 {
+            color: steelblue;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin: 10px;
+            background: steelblue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: navy;
+        }
+
+        table {
+            width: 80%;
+            margin: 25px auto;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 12px;
+        }
+
+        th {
+            background: steelblue;
+            color: white;
+        }
+
+        #message {
+            font-weight: bold;
+        }
+    </style>
 </head>
+
 <body>
-<h2>Load JSON Data</h2>
-<button onclick="loadFetch()">Load using fetch()</button>
-<button onclick="loadJQuery()">Load using jQuery</button>
-<table border="1" cellpadding="6">
-<tr>
-<th>ID</th><th>Name</th><th>Email</th><th>City</th>
-</tr>
-<tbody id="tableBody"></tbody>
-</table>
-<script>
-let url = "https://jsonplaceholder.typicode.com/users";
-// Using fetch()
-function loadFetch() {
-fetch(url)
-.then(response => response.json())
-.then(data => showData(data))
-.catch(error => alert("Unable to load data"));
-}
-// Using jQuery
-function loadJQuery() {
-$.getJSON(url, function(data) {
-showData(data);
-});
-}
-function showData(users) {
-let rows = "";
-for (let i = 0; i < users.length; i++) {
-rows += "<tr>" +
-"<td>" + users[i].id + "</td>" +
-"<td>" + users[i].name + "</td>" +
-"<td>" + users[i].email + "</td>" +
-"<td>" + users[i].address.city + "</td>" +
-"</tr>";
-}
-document.getElementById("tableBody").innerHTML = rows;
-}
-</script>
+
+    <h1>Student JSON Data</h1>
+
+    <p>Load student details using JSON</p>
+
+    <button onclick="loadFetch()">
+        Load Using Fetch
+    </button>
+
+    <button onclick="loadJQuery()">
+        Load Using jQuery
+    </button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>City</th>
+            </tr>
+        </thead>
+
+        <tbody id="tableData">
+            <tr>
+                <td colspan="4">Click a button to load data</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p id="message"></p>
+
+    <script>
+
+        // Local JSON data
+        const students = [
+            {
+                id: 1,
+                name: "Kanak",
+                email: "kanak@gmail.com",
+                city: "Nagpur"
+            },
+            {
+                id: 2,
+                name: "Arnav",
+                email: "arnav@gmail.com",
+                city: "Pune"
+            },
+            {
+                id: 3,
+                name: "Preetish",
+                email: "preetish@gmail.com",
+                city: "Mumbai"
+            }
+        ];
+
+        // Convert JSON data into a URL
+        const jsonData = URL.createObjectURL(
+            new Blob([JSON.stringify(students)], {
+                type: "application/json"
+            })
+        );
+
+        // Load JSON using Fetch API
+        function loadFetch() {
+
+            fetch(jsonData)
+                .then(response => response.json())
+                .then(data => {
+                    displayData(data);
+
+                    document.getElementById("message").innerHTML =
+                        "Data loaded successfully using Fetch!";
+                })
+                .catch(error => {
+                    document.getElementById("message").innerHTML =
+                        "Error loading data!";
+                });
+        }
+
+        // Load JSON using jQuery
+        function loadJQuery() {
+
+            $.getJSON(jsonData, function(data) {
+
+                displayData(data);
+
+                $("#message").html(
+                    "Data loaded successfully using jQuery!"
+                );
+
+            }).fail(function() {
+
+                $("#message").html("Error loading data!");
+
+            });
+        }
+
+        // Display data in HTML table
+        function displayData(data) {
+
+            let rows = "";
+
+            data.forEach(student => {
+
+                rows += `
+                    <tr>
+                        <td>${student.id}</td>
+                        <td>${student.name}</td>
+                        <td>${student.email}</td>
+                        <td>${student.city}</td>
+                    </tr>
+                `;
+
+            });
+
+            document.getElementById("tableData").innerHTML = rows;
+        }
+
+    </script>
+
 </body>
 </html>
 ```
