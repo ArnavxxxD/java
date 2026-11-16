@@ -389,42 +389,78 @@ function displayCart() {
 ```html
 <!DOCTYPE html>
 <html>
+<head>
+<title>Experiment 6</title>
+<style>
+body {
+    font-family: Arial;
+    background: #fff7ed;
+    text-align: center;
+    padding: 30px;
+}
+.box {
+    background: white;
+    width: 380px;
+    margin: auto;
+    padding: 25px;
+    border-radius: 10px;
+}
+input, textarea, button {
+    padding: 10px;
+    margin: 8px;
+    width: 85%;
+}
+button {
+    background: orange;
+    color: white;
+    border: none;
+}
+</style>
+</head>
 <body>
-<h2>Email Validation</h2>
-<input id="email" placeholder="Enter email">
-<button onclick="checkEmail()">Check Email</button>
-<p id="emailResult"></p>
-<h2>Text Analysis</h2>
-<textarea id="text" rows="5" cols="45">Contact info@abc.com. Call 9876543210.</textarea><br>
-<button onclick="analyse()">Analyse Text</button>
+
+<div class="box">
+<h2>String & Regex Operations</h2>
+
+<input id="email" placeholder="Enter Email">
+<button onclick="validateEmail()">Validate Email</button>
+
+<textarea id="text" placeholder="Enter some text"></textarea>
+<button onclick="analyzeText()">Analyze Text</button>
+
 <p id="result"></p>
+</div>
+
 <script>
-function checkEmail() {
-let email = document.getElementById("email").value;
-let pattern = /^[a-zA-Z0-9._]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/;
-if (pattern.test(email)) {
-document.getElementById("emailResult").innerText = "Valid Email";
-} else {
-document.getElementById("emailResult").innerText = "Invalid Email";
+// Email validation using Regex
+function validateEmail() {
+    let email = document.getElementById("email").value;
+
+    let pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (pattern.test(email))
+        alert("Valid Email");
+    else
+        alert("Invalid Email");
 }
-}
-function analyse() {
-let text = document.getElementById("text").value;
-let characters = text.length;
-let words = text.trim().split(/\s+/).length;
-let upper = text.toUpperCase();
-let emails = text.match(/[a-zA-Z0-9._]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}/g);
-let phones = text.match(/\d{10}/g);
-let vowels = text.match(/[aeiou]/gi);
-document.getElementById("result").innerHTML =
-"Characters: " + characters +
-"<br>Words: " + words +
-"<br>Vowels: " + (vowels ? vowels.length : 0) +
-"<br>Emails: " + (emails || "None") +
-"<br>Phone numbers: " + (phones || "None") +
-"<br>Uppercase: " + upper;
+
+// String functions and data extraction
+function analyzeText() {
+    let str = document.getElementById("text").value;
+
+    let words = str.trim() ? str.trim().split(/\s+/).length : 0;
+
+    let numbers = str.match(/\d+/g) || [];
+
+    document.getElementById("result").innerHTML =
+        "Length: " + str.length +
+        "<br>Uppercase: " + str.toUpperCase() +
+        "<br>Lowercase: " + str.toLowerCase() +
+        "<br>Words: " + words +
+        "<br>Numbers: " + numbers.join(", ");
 }
 </script>
+
 </body>
 </html>
 ```
